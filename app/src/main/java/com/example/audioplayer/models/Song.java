@@ -52,10 +52,9 @@ public class Song {
     @ColumnInfo(name = "artistId")
     private int artistId;
 
-    public Song(@NonNull int id, int trackNumber, int year, int albumId,
+    public Song(int trackNumber, int year, int albumId,
                 int artistId, long duration, long bookmark,
                 String title, String date) {
-        this.id = id;
         this.trackNumber = trackNumber;
         this.year = year;
         this.albumId = albumId;
