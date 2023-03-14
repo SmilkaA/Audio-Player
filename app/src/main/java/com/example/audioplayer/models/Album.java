@@ -16,9 +16,13 @@ public class Album {
     @ColumnInfo(name = "album_name")
     private String name;
 
-    public Album(@NonNull int id, String name) {
+    @ColumnInfo(name = "artistId")
+    private int artistId;
+
+    public Album(@NonNull int id, String name, int artistId) {
         this.id = id;
         this.name = name;
+        this.artistId = artistId;
     }
 
     public int getId() {
@@ -31,5 +35,13 @@ public class Album {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public int getArtistId() {
+        return artistId;
+    }
+
+    public void setArtistId(int artistId) {
+        this.artistId = artistId;
     }
 }

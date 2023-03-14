@@ -43,6 +43,9 @@ public class Song {
     @ColumnInfo(name = "date")
     private String date;
 
+    @ColumnInfo(name = "genre")
+    private String genre;
+
     @ColumnInfo(name = "albumId")
     private int albumId;
 
@@ -133,5 +136,13 @@ public class Song {
 
     public void setArtistId(int artistId) {
         this.artistId = artistId;
+    }
+
+    public String getGenre() {
+        return genre;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
     }
 }
