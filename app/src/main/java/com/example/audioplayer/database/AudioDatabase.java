@@ -2,9 +2,11 @@ package com.example.audioplayer.database;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.audioplayer.models.Album;
 import com.example.audioplayer.models.Artist;
@@ -30,10 +32,23 @@ public abstract class AudioDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                                     AudioDatabase.class, "audio_database")
+                            .addCallback(sRoomDatabaseCallback)
                             .build();
                 }
             }
         }
         return INSTANCE;
     }
+    private static RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback() {
+        @Override
+        public void onCreate(@NonNull SupportSQLiteDatabase db) {
+            super.onCreate(db);
+
+            databaseWriteExecutor.execute(() -> {
+                AudioDAO dao = INSTANCE.audioDAO();
+                Song song = new Song(1,"","","","","","",1,1,1,1,1,1);
+                dao.insertSong(song);
+            });
+        }
+    };
 }

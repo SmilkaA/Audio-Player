@@ -24,6 +24,10 @@ public class RecentHistory {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public long getTimePlayed() {
         return timePlayed;
     }

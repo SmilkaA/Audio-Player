@@ -4,21 +4,7 @@ import androidx.room.*;
 
 import io.reactivex.annotations.NonNull;
 
-@Entity(tableName = "songs_table", foreignKeys = {
-        @ForeignKey(
-                entity = Album.class,
-                parentColumns = {"album_id"},
-                childColumns = {"album_id"},
-                onDelete = ForeignKey.CASCADE,
-                onUpdate = ForeignKey.CASCADE
-        ),
-        @ForeignKey(
-                entity = Artist.class,
-                parentColumns = {"artist_id"},
-                childColumns = {"artist_id"},
-                onDelete = ForeignKey.CASCADE,
-                onUpdate = ForeignKey.CASCADE
-        )})
+@Entity(tableName = "songs_table")
 public class Song {
     @PrimaryKey(autoGenerate = true)
     @NonNull
@@ -67,6 +53,9 @@ public class Song {
     @ColumnInfo(name = "data")
     private String data;
 
+    public Song() {
+    }
+
     public Song(int id, String title, String artistName,
                 String composer, String albumName, String albumArt,
                 String data, int trackNumber, int year, long duration,
@@ -88,6 +77,10 @@ public class Song {
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public int getTrackNumber() {

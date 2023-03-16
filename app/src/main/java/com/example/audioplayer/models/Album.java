@@ -2,6 +2,7 @@ package com.example.audioplayer.models;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class Album {
     @ColumnInfo(name = "artistId")
     private int artistId;
 
+    @Ignore
     private List<Song> songsInAlbum;
 
     public Album(@NonNull int id, String name, int artistId) {
