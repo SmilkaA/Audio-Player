@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -14,7 +13,10 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.audioplayer.database.DataLoader;
 import com.example.audioplayer.databinding.ActivityMainBinding;
+import com.example.audioplayer.models.Song;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,8 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
         initBottomNavigation();
         checkPermission();
-        DataLoader dataLoader = new DataLoader(getApplicationContext());
-        Log.d("111", String.valueOf(dataLoader.getAllAudioFromDevice()));
+        getAudioData();
     }
 
     private void initBottomNavigation() {
@@ -51,5 +52,10 @@ public class MainActivity extends AppCompatActivity {
                         1);
             }
         }
+    }
+
+    public List<Song> getAudioData() {
+        DataLoader dataLoader = new DataLoader(getApplicationContext());
+        return dataLoader.getAllAudioFromDevice();
     }
 }

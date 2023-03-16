@@ -27,6 +27,6 @@ public class AudioCursorWrapper extends CursorWrapper {
         int albumId = getInt(getColumnIndex(MediaStore.Audio.Media.ALBUM_ID));
         int artistId = getInt(getColumnIndex(MediaStore.Audio.Media.ARTIST_ID));
         long bookmark = getLong(getColumnIndex(MediaStore.Audio.Media.BOOKMARK));
-        return new Song(trackNumber, year, albumId, artistId, duration, bookmark, title, data);
+        return new Song(trackNumber, year, albumId, artistId, duration, bookmark, title, data,artistName);
     }
 }

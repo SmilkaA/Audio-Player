@@ -37,8 +37,8 @@ public class Song {
     @ColumnInfo(name = "bookmark")
     private long bookmark;
 
-    @ColumnInfo(name = "title")
-    private String title;
+    @ColumnInfo(name = "song_name")
+    private String songName;
 
     @ColumnInfo(name = "date")
     private String date;
@@ -52,17 +52,21 @@ public class Song {
     @ColumnInfo(name = "artistId")
     private int artistId;
 
+    @ColumnInfo(name = "artist_name")
+    private String artistName;
+
     public Song(int trackNumber, int year, int albumId,
                 int artistId, long duration, long bookmark,
-                String title, String date) {
+                String songName, String date, String artistName) {
         this.trackNumber = trackNumber;
         this.year = year;
         this.albumId = albumId;
         this.artistId = artistId;
         this.duration = duration;
         this.bookmark = bookmark;
-        this.title = title;
+        this.songName = songName;
         this.date = date;
+        this.artistName = artistName;
     }
 
     public int getId() {
@@ -93,8 +97,8 @@ public class Song {
         return bookmark;
     }
 
-    public String getTitle() {
-        return title;
+    public String getSongName() {
+        return songName;
     }
 
     public String getDate() {
@@ -121,8 +125,8 @@ public class Song {
         this.bookmark = bookmark;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setSongName(String songName) {
+        this.songName = songName;
     }
 
     public void setDate(String date) {
@@ -143,5 +147,13 @@ public class Song {
 
     public void setGenre(String genre) {
         this.genre = genre;
+    }
+
+    public String getArtistName() {
+        return artistName;
+    }
+
+    public void setArtistName(String artistName) {
+        this.artistName = artistName;
     }
 }

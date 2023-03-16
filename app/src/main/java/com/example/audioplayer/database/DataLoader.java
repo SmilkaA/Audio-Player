@@ -15,8 +15,7 @@ public class DataLoader {
 
     private final Context context;
     private Uri uri;
-    private final String selection = MediaStore.Audio.Media.DATA + " like ? ";
-    private final String[] selectionArgs = new String[]{"%/storage/emulated/%"};
+    private final String selection = MediaStore.Audio.Media.IS_MUSIC + "!=0";
     private static final List<Song> audioList = new ArrayList<>();
 
     public DataLoader(Context context) {
@@ -33,7 +32,8 @@ public class DataLoader {
     }
 
     public List<Song> getAllAudioFromDevice() {
-        Cursor cursor = context.getContentResolver().query(uri, null, selection, selectionArgs, null);
+        Cursor cursor = context.getContentResolver().query(uri, null, selection, null, null);
+        audioList.clear();
         if (cursor != null) {
             AudioCursorWrapper audioCursorWrapper = new AudioCursorWrapper(cursor);
             while (cursor.moveToNext()) {
