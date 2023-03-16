@@ -6,6 +6,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
 
+import com.example.audioplayer.models.Album;
+import com.example.audioplayer.models.Artist;
 import com.example.audioplayer.models.Song;
 
 import java.util.ArrayList;
