@@ -44,15 +44,15 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Album albumToDisplay = albums.get(position);
         holder.albumName.setText(albumToDisplay.getName());
-        holder.songsAmount.setText(context.getString(albumToDisplay.getSongsInAlbum().size(),
-                R.string.amount_of_songs));
+        holder.songsAmount.setText(context.getString(R.string.amount_of_songs,
+                String.valueOf(albumToDisplay.getSongsInAlbum().size())));
 
         holder.itemView.setOnClickListener(v -> listener.onClick(position));
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return albums.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
