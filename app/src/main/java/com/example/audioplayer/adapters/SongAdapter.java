@@ -28,7 +28,11 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
 
     public SongAdapter(Context context, List<Song> songs, OnClickListener onClickListener) {
         this.context = context;
-        this.songs = songs;
+        if (songs != null) {
+            this.songs = songs;
+        } else {
+            this.songs = new ArrayList<>();
+        }
         this.listener = onClickListener;
     }
 

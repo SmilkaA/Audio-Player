@@ -4,6 +4,8 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.util.List;
+
 import io.reactivex.annotations.NonNull;
 
 @Entity(tableName = "albums_table")
@@ -18,6 +20,8 @@ public class Album {
 
     @ColumnInfo(name = "artistId")
     private int artistId;
+
+    private List<Song> songsInAlbum;
 
     public Album(@NonNull int id, String name, int artistId) {
         this.id = id;
@@ -43,5 +47,13 @@ public class Album {
 
     public void setArtistId(int artistId) {
         this.artistId = artistId;
+    }
+
+    public List<Song> getSongsInAlbum() {
+        return songsInAlbum;
+    }
+
+    public void setSongsInAlbum(List<Song> songsInAlbum) {
+        this.songsInAlbum = songsInAlbum;
     }
 }
