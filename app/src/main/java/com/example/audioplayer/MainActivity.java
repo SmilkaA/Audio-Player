@@ -31,7 +31,6 @@ public class MainActivity extends AppCompatActivity {
 
         initBottomNavigation();
         checkPermission();
-        getAudioData();
     }
 
     private void initBottomNavigation() {

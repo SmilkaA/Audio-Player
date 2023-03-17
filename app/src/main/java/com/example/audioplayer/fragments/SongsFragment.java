@@ -2,7 +2,6 @@ package com.example.audioplayer.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,16 +34,13 @@ public class SongsFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         mainActivity = (MainActivity) requireActivity();
+        songs = mainActivity.getAudioData();
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         binding = FragmentSongsBinding.inflate(inflater, container, false);
         SongsViewModel songsViewModel = new ViewModelProvider(this).get(SongsViewModel.class);
-        songs = mainActivity.getAudioData();
-        for (Song song : songs) {
-            songsViewModel.insert(song);
-        }
 
         listener = new OnClickListener() {
             @Override

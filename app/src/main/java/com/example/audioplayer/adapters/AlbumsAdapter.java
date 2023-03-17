@@ -18,9 +18,9 @@ import java.util.List;
 
 public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder> {
 
-    private Context context;
-    private List<Album> albums;
-    private OnClickListener listener;
+    private final Context context;
+    private final List<Album> albums;
+    private final OnClickListener listener;
 
     public AlbumsAdapter(Context context, List<Album> albums, OnClickListener listener) {
         this.context = context;
@@ -43,7 +43,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Album albumToDisplay = albums.get(position);
-        holder.albumName.setText(albumToDisplay.getName());
+        holder.albumName.setText(albumToDisplay.getAlbumName());
         holder.songsAmount.setText(context.getString(R.string.amount_of_songs,
                 String.valueOf(albumToDisplay.getSongsInAlbum().size())));
 
@@ -55,7 +55,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         return albums.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView albumName;
         TextView songsAmount;
