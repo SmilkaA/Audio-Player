@@ -10,8 +10,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.audioplayer.R;
 import com.example.audioplayer.models.Album;
+import com.example.audioplayer.models.Song;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +48,7 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
         holder.albumName.setText(albumToDisplay.getAlbumName());
         holder.songsAmount.setText(context.getString(R.string.amount_of_songs,
                 String.valueOf(albumToDisplay.getSongsInAlbum().size())));
+        loadThumbnail(holder, albumToDisplay);
 
         holder.itemView.setOnClickListener(v -> listener.onClick(position));
     }
@@ -67,6 +70,19 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
             albumName = itemView.findViewById(R.id.item_album_name);
             songsAmount = itemView.findViewById(R.id.item_album_no_of_songs);
             thumbnail = itemView.findViewById(R.id.item_album_image);
+        }
+    }
+
+    private void loadThumbnail(@NonNull ViewHolder holder, Album albumToDisplay) {
+        Song song = albumToDisplay.getSongsInAlbum().get(0);
+        if (song.getThumbnail().equals("11")) {
+            Glide.with(context)
+                    .load(R.drawable.default_album_icon)
+                    .into(holder.thumbnail);
+        } else {
+            Glide.with(context)
+                    .load(song.getThumbnailUri())
+                    .into(holder.thumbnail);
         }
     }
 }

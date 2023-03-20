@@ -1,19 +1,16 @@
 package com.example.audioplayer.adapters;
 
 import android.content.Context;
-import android.net.wifi.ScanResult;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.audioplayer.R;
 import com.example.audioplayer.models.Song;
 
@@ -50,6 +47,8 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
         holder.songName.setText(songToDisplay.getSongName());
         holder.artistName.setText(songToDisplay.getArtistName());
 
+        loadThumbnail(holder, songToDisplay);
+
         holder.itemView.setOnClickListener(v -> listener.onClick(position));
     }
 
@@ -69,17 +68,17 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
             artistName = itemView.findViewById(R.id.item_song_artist_name);
             thumbnail = itemView.findViewById(R.id.icon_item_song);
         }
+    }
 
-        public TextView getSongName() {
-            return songName;
-        }
-
-        public TextView getArtistName() {
-            return artistName;
-        }
-
-        public ImageView getThumbnail() {
-            return thumbnail;
+    private void loadThumbnail(@NonNull ViewHolder holder, Song songToDisplay) {
+        if (songToDisplay.getThumbnail().equals("11")) {
+            Glide.with(context)
+                    .load(R.drawable.default_album_icon)
+                    .into(holder.thumbnail);
+        } else {
+            Glide.with(context)
+                    .load(songToDisplay.getThumbnailUri())
+                    .into(holder.thumbnail);
         }
     }
 }

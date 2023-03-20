@@ -16,6 +16,7 @@ import java.util.List;
 
 public class DataLoader {
 
+    public static final Uri THUMBNAIL_URI = Uri.parse("content://media/external/audio/albumart");
     private final Context context;
     private Uri uri;
     private final String selection = MediaStore.Audio.Media.IS_MUSIC + "!=0";

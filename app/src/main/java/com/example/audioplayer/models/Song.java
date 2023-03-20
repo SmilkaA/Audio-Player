@@ -1,6 +1,11 @@
 package com.example.audioplayer.models;
 
+import android.content.ContentUris;
+import android.net.Uri;
+
 import androidx.room.*;
+
+import com.example.audioplayer.database.DataLoader;
 
 import io.reactivex.annotations.NonNull;
 
@@ -157,6 +162,12 @@ public class Song {
 
     public String getThumbnail() {
         return thumbnail;
+    }
+
+    public String getThumbnailUri() {
+        Uri albumUri = DataLoader.THUMBNAIL_URI;
+        Uri uri = ContentUris.withAppendedId(albumUri, Long.parseLong(String.valueOf(getAlbumId())));
+        return String.valueOf(uri);
     }
 
     public void setThumbnail(String thumbnail) {
