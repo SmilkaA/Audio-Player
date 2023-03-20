@@ -60,13 +60,13 @@ public class DataLoader {
                             album.addSongToAlbum(audioFromDevice);
                         }
                     } else {
-                        if (checkAlbumBeforeAdd(audioFromDevice.getAlbumName()))
+                        if (checkAlbumBeforeAdd(audioFromDevice.getAlbumName())) {
                             albumsList.add(createNewAlbumForSong(audioFromDevice));
+                        }
                     }
                 }
             }
         }
-        Log.d("111", String.valueOf(albumsList.size()));
         return albumsList;
     }
 
@@ -89,6 +89,41 @@ public class DataLoader {
     }
 
     public List<Artist> getAllArtists() {
+        getAllAlbums();
+        for (Album album : albumsList) {
+            if (new ArrayList<>(artistsList).isEmpty()) {
+                artistsList.add(createNewArtistByAlbum(album));
+            } else {
+                for (Artist artist : new ArrayList<>(artistsList)) {
+                    String artistName = album.getSongsInAlbum().get(0).getArtistName();
+                    if (artist.getName().equals(artistName)) {
+                        if (!artist.getAlbumsPerArtist().contains(album)) {
+                            artist.addAlbumToArtist(album);
+                        }
+                    } else {
+                        if (checkArtistBeforeAdd(artistName)) {
+                            artistsList.add(createNewArtistByAlbum(album));
+                        }
+                    }
+                }
+            }
+        }
         return artistsList;
+    }
+
+    private Artist createNewArtistByAlbum(Album sourceAlbum) {
+        Artist artistToAdd = new Artist();
+        artistToAdd.setName(sourceAlbum.getSongsInAlbum().get(0).getArtistName());
+        artistToAdd.addAlbumToArtist(sourceAlbum);
+        return artistToAdd;
+    }
+
+    private boolean checkArtistBeforeAdd(String artistName) {
+        for (Artist artist : new ArrayList<>(artistsList)) {
+            if (artist.getName().contains(artistName)) {
+                return false;
+            }
+        }
+        return true;
     }
 }

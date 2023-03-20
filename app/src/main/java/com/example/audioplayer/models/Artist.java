@@ -7,6 +7,7 @@ import androidx.room.PrimaryKey;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.reactivex.annotations.NonNull;
@@ -25,15 +26,7 @@ public class Artist {
     private List<Album> albumsPerArtist;
 
     public Artist() {
-    }
-
-    public Artist(@NotNull List<Album> albumsPerArtist) {
-        this.albumsPerArtist = albumsPerArtist;
-    }
-
-    public Artist(@NonNull int id, String name) {
-        this.id = id;
-        this.name = name;
+        this.albumsPerArtist = new ArrayList<>();
     }
 
     public int getId() {
@@ -52,11 +45,23 @@ public class Artist {
         this.albumsPerArtist = albumsPerArtist;
     }
 
+    public void addAlbumToArtist(Album album) {
+        this.albumsPerArtist.add(album);
+    }
+
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public List<Song> getSongPerArtist() {
+        List<Song> songsPerArtist = new ArrayList<>();
+        for (Album album : albumsPerArtist) {
+            songsPerArtist.addAll(album.getSongsInAlbum());
+        }
+        return songsPerArtist;
     }
 }

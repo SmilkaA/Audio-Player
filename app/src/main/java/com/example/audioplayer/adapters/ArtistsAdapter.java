@@ -44,8 +44,10 @@ public class ArtistsAdapter extends RecyclerView.Adapter<ArtistsAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Artist artistToDisplay = artists.get(position);
         holder.artistName.setText(artistToDisplay.getName());
-        holder.albumsAmount.setText(context.getString(R.string.amount_of_albums, "1"));
-        holder.songsAmount.setText(context.getString(R.string.amount_of_songs, "1"));
+        holder.albumsAmount.setText(context.getString(R.string.amount_of_albums,
+                String.valueOf(artistToDisplay.getAlbumsPerArtist().size())));
+        holder.songsAmount.setText(context.getString(R.string.amount_of_songs,
+                String.valueOf(artistToDisplay.getSongPerArtist().size())));
 
         holder.itemView.setOnClickListener(v -> listener.onClick(position));
     }

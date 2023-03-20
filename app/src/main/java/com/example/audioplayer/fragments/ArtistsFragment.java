@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.audioplayer.MainActivity;
 import com.example.audioplayer.adapters.ArtistsAdapter;
 import com.example.audioplayer.adapters.OnClickListener;
+import com.example.audioplayer.database.DataLoader;
 import com.example.audioplayer.databinding.FragmentArtistsBinding;
 import com.example.audioplayer.models.Artist;
 
@@ -33,6 +34,8 @@ public class ArtistsFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         mainActivity = (MainActivity) requireActivity();
+        DataLoader dataLoader = new DataLoader(getContext());
+        artists = dataLoader.getAllArtists();
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
