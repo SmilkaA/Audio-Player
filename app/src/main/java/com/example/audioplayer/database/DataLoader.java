@@ -50,6 +50,7 @@ public class DataLoader {
     }
 
     public List<Album> getAllAlbums() {
+        albumsList.clear();
         for (Song audioFromDevice : audioList) {
             if (new ArrayList<>(albumsList).isEmpty()) {
                 albumsList.add(createNewAlbumForSong(audioFromDevice));
@@ -89,6 +90,7 @@ public class DataLoader {
     }
 
     public List<Artist> getAllArtists() {
+        artistsList.clear();
         for (Song song : audioList) {
             if (new ArrayList<>(artistsList).isEmpty()) {
                 artistsList.add(createNewArtistBySong(song));

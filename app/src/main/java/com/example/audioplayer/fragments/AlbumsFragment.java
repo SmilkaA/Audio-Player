@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,12 +17,9 @@ import com.example.audioplayer.MainActivity;
 import com.example.audioplayer.R;
 import com.example.audioplayer.adapters.AlbumsAdapter;
 import com.example.audioplayer.adapters.OnClickListener;
-import com.example.audioplayer.database.DataLoader;
 import com.example.audioplayer.databinding.FragmentAlbumsBinding;
 import com.example.audioplayer.models.Album;
-import com.example.audioplayer.models.Song;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class AlbumsFragment extends Fragment implements OnClickListener {
@@ -35,8 +31,7 @@ public class AlbumsFragment extends Fragment implements OnClickListener {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         MainActivity mainActivity = (MainActivity) requireActivity();
-        DataLoader dataLoader = new DataLoader(getContext());
-        albums = dataLoader.getAllAlbums();
+        albums = mainActivity.getAlbumsData();
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,

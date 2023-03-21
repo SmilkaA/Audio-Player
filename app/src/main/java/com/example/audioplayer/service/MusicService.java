@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
+import com.example.audioplayer.R;
 import com.example.audioplayer.database.DataLoader;
 import com.example.audioplayer.models.Song;
 
@@ -58,7 +59,7 @@ public class MusicService extends Service implements
                 mNotificationManager.notify(NOTIFICATION_ID, NotificationHandler.createNotification(this, currentSong, false));
                 break;
             case NOTIFICATION_ACTION_PLAY:
-                mNotificationManager.notify(NOTIFICATION_ID, NotificationHandler.createNotification(this, new DataLoader(getApplicationContext()).getAllAudioFromDevice().get(intent.getExtras().getInt("song_id")), true));
+                mNotificationManager.notify(NOTIFICATION_ID, NotificationHandler.createNotification(this, new DataLoader(getApplicationContext()).getAllAudioFromDevice().get(intent.getExtras().getInt(getString(R.string.song_item_id_key))), true));
                 if (player != null) {
                     start();
                 } else {

@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +24,7 @@ import com.example.audioplayer.databinding.FragmentSongsBinding;
 import com.example.audioplayer.models.Song;
 import com.example.audioplayer.service.Constants;
 import com.example.audioplayer.service.MusicService;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,9 +32,13 @@ import java.util.List;
 public class SongsFragment extends Fragment implements OnClickListener {
 
     private FragmentSongsBinding binding;
+    private MainActivity mainActivity;
+    private BottomNavigationView bottomNavigationView;
     private List<Song> songs;
     private MusicService musicService;
     boolean boundService = false;
+    private String filterByAlbum = "";
+    private String filterByArtist = "";
     private final ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName className, IBinder service) {
@@ -52,18 +56,28 @@ public class SongsFragment extends Fragment implements OnClickListener {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        MainActivity mainActivity = (MainActivity) requireActivity();
+        mainActivity = (MainActivity) requireActivity();
         songs = mainActivity.getAudioData();
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+
         binding = FragmentSongsBinding.inflate(inflater, container, false);
+        bottomNavigationView = mainActivity.findViewById(R.id.nav_view);
         SongsViewModel songsViewModel = new ViewModelProvider(this).get(SongsViewModel.class);
 
         initRecyclerView();
 
         return binding.getRoot();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if ((filterByAlbum == null && !filterByArtist.equals("")) || (!filterByAlbum.equals(""))) {
+            bottomNavigationView.setVisibility(View.GONE);
+        }
     }
 
     private void initRecyclerView() {
@@ -95,9 +109,15 @@ public class SongsFragment extends Fragment implements OnClickListener {
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        songs = mainActivity.getAudioData();
+    }
+
+    @Override
     public void onClick(int index) {
         Intent playIntent = new Intent(getContext(), MusicService.class);
-        playIntent.putExtra("song_id", index);
+        playIntent.putExtra(getString(R.string.song_item_id_key), index);
         playIntent.setAction(Constants.NOTIFICATION_ACTION_PLAY);
         requireActivity().startService(playIntent);
         musicService.play(songs.get(index));
@@ -106,10 +126,11 @@ public class SongsFragment extends Fragment implements OnClickListener {
     private void filterSongsList() {
         try {
             Bundle bundle = getArguments();
-            String filterByAlbum = bundle.getString(getString(R.string.intent_key_album_name_data));
-            String filterByArtist = bundle.getString(getString(R.string.intent_key_artist_name_data));
+            filterByAlbum = bundle.getString(getString(R.string.intent_key_album_name_data));
+            filterByArtist = bundle.getString(getString(R.string.intent_key_artist_name_data));
             filterByAlbum(filterByAlbum);
             filterByArtist(filterByArtist);
+            bundle.clear();
         } catch (Exception ignored) {
         }
     }

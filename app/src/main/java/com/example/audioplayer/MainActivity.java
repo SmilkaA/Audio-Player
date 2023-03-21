@@ -4,7 +4,7 @@ import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -16,6 +16,8 @@ import com.example.audioplayer.database.DataLoader;
 import com.example.audioplayer.databinding.ActivityMainBinding;
 import com.example.audioplayer.fragments.AlbumsFragment;
 import com.example.audioplayer.fragments.SongsFragment;
+import com.example.audioplayer.models.Album;
+import com.example.audioplayer.models.Artist;
 import com.example.audioplayer.models.Song;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -24,13 +26,15 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
+    private DataLoader dataLoader;
     private String filterByAlbum = "";
-    private String filterByArtist= "";
+    private String filterByArtist = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        dataLoader = new DataLoader(getApplicationContext());
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -61,8 +65,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public List<Song> getAudioData() {
-        DataLoader dataLoader = new DataLoader(getApplicationContext());
         return dataLoader.getAllAudioFromDevice();
+    }
+
+    public List<Album> getAlbumsData() {
+        return dataLoader.getAllAlbums();
+    }
+
+    public List<Artist> getArtistsData() {
+        return dataLoader.getAllArtists();
     }
 
     private void sendDataToSongFragment() {
@@ -81,20 +92,9 @@ public class MainActivity extends AppCompatActivity {
         try {
             Bundle b = getIntent().getExtras();
             filterByAlbum = b.getString(getString(R.string.intent_key_album_name));
-            filterByArtist= b.getString(getString(R.string.intent_key_artist_name));
-            Log.d("111Main", filterByAlbum + "_" + filterByArtist);
+            filterByArtist = b.getString(getString(R.string.intent_key_artist_name));
         } catch (Exception ignored) {
         }
     }
 
-    private void sendDataToAlbumFragment() {
-        getDataFromFragments();
-        Bundle bundle = new Bundle();
-        bundle.putString(getString(R.string.intent_key_artist_name_data), filterByArtist);
-        AlbumsFragment albumsFragment = new AlbumsFragment();
-        albumsFragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction()
-                .add(R.id.albums_container, albumsFragment)
-                .commit();
-    }
 }
