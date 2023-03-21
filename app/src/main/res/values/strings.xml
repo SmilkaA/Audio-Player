@@ -10,4 +10,8 @@
     <string name="intent_key_artist_name">artist_name</string>
     <string name="intent_key_artist_name_data">artist_name_data</string>
     <string name="song_item_id_key">song_item_id</string>
+    <string name="action_previous">PREVIOUS</string>
+    <string name="action_play">PLAY</string>
+    <string name="action_next">NEXT</string>
+    <string name="action_pause">PAUSE</string>
 </resources>
