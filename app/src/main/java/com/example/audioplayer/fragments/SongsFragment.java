@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -33,11 +32,9 @@ import java.util.List;
 public class SongsFragment extends Fragment implements OnClickListener {
 
     private FragmentSongsBinding binding;
-    private MainActivity mainActivity;
     private List<Song> songs;
     private MusicService musicService;
     boolean boundService = false;
-    private String strtext = "";
     private final ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName className, IBinder service) {
@@ -55,7 +52,7 @@ public class SongsFragment extends Fragment implements OnClickListener {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        mainActivity = (MainActivity) requireActivity();
+        MainActivity mainActivity = (MainActivity) requireActivity();
         songs = mainActivity.getAudioData();
     }
 
@@ -109,15 +106,36 @@ public class SongsFragment extends Fragment implements OnClickListener {
     private void filterSongsList() {
         try {
             Bundle bundle = getArguments();
-            strtext = bundle.getString(getString(R.string.intent_key_album_name_data));
-            if (!strtext.equals("")) {
+            String filterByAlbum = bundle.getString(getString(R.string.intent_key_album_name_data));
+            String filterByArtist = bundle.getString(getString(R.string.intent_key_artist_name_data));
+            filterByAlbum(filterByAlbum);
+            filterByArtist(filterByArtist);
+        } catch (Exception ignored) {
+        }
+    }
+
+    private void filterByAlbum(String filterByAlbum) {
+        if (filterByAlbum != null) {
+            if (!filterByAlbum.equals("")) {
                 for (Song song : new ArrayList<>(songs)) {
-                    if (!song.getAlbumName().equals(strtext)) {
+                    if (!song.getAlbumName().equals(filterByAlbum)) {
                         songs.remove(song);
                     }
                 }
             }
-        } catch (Exception ignored) {
         }
     }
+
+    private void filterByArtist(String filterByArtist) {
+        if (filterByArtist != null) {
+            if (!filterByArtist.equals("")) {
+                for (Song song : new ArrayList<>(songs)) {
+                    if (!song.getArtistName().equals(filterByArtist)) {
+                        songs.remove(song);
+                    }
+                }
+            }
+        }
+    }
+
 }

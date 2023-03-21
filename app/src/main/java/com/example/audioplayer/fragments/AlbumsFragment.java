@@ -21,7 +21,9 @@ import com.example.audioplayer.adapters.OnClickListener;
 import com.example.audioplayer.database.DataLoader;
 import com.example.audioplayer.databinding.FragmentAlbumsBinding;
 import com.example.audioplayer.models.Album;
+import com.example.audioplayer.models.Song;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AlbumsFragment extends Fragment implements OnClickListener {

@@ -7,4 +7,6 @@
     <string name="amount_of_albums"> %1$s Albums</string>
     <string name="intent_key_album_name">album_name</string>
     <string name="intent_key_album_name_data">album_name_data</string>
+    <string name="intent_key_artist_name">album_name_from_artist</string>
+    <string name="intent_key_artist_name_data">album_name_from_artist_data</string>
 </resources>
