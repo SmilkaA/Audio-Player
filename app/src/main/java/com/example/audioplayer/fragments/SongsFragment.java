@@ -75,8 +75,11 @@ public class SongsFragment extends Fragment implements OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
-        if ((filterByAlbum == null && !filterByArtist.equals("")) || (!filterByAlbum.equals(""))) {
-            bottomNavigationView.setVisibility(View.GONE);
+        try {
+            if ((!filterByArtist.equals("")) || (!filterByAlbum.equals(""))) {
+                bottomNavigationView.setVisibility(View.GONE);
+            }
+        } catch (Exception exception) {
         }
     }
 
