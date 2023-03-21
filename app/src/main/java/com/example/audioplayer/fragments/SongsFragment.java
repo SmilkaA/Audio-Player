@@ -123,7 +123,6 @@ public class SongsFragment extends Fragment implements OnClickListener {
         playIntent.putExtra(getString(R.string.song_item_id_key), index);
         playIntent.setAction(Constants.NOTIFICATION_ACTION_PLAY);
         requireActivity().startService(playIntent);
-        musicService.play(songs.get(index));
     }
 
     private void filterSongsList() {

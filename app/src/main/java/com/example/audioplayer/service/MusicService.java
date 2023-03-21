@@ -14,7 +14,6 @@ import android.os.IBinder;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.core.app.NotificationCompat;
 
 import com.example.audioplayer.R;
 import com.example.audioplayer.database.DataLoader;
@@ -41,13 +40,21 @@ public class MusicService extends Service implements
         return musicBind;
     }
 
-    protected NotificationManager mNotificationManager;
-    protected NotificationCompat.Builder mNotificationBuilder;
-
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        player = new MediaPlayer();
+        initMusicService();
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        try {
+            currentSong = new DataLoader(getApplicationContext()).getAllAudioFromDevice().get(intent.getExtras().getInt(getString(R.string.song_item_id_key)));
+        } catch (Exception ignored) {
+        }
+
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         switch (intent.getAction()) {
             case NOTIFICATION_ACTION_PREV:
@@ -59,12 +66,13 @@ public class MusicService extends Service implements
                 mNotificationManager.notify(NOTIFICATION_ID, NotificationHandler.createNotification(this, currentSong, false));
                 break;
             case NOTIFICATION_ACTION_PLAY:
-                mNotificationManager.notify(NOTIFICATION_ID, NotificationHandler.createNotification(this, new DataLoader(getApplicationContext()).getAllAudioFromDevice().get(intent.getExtras().getInt(getString(R.string.song_item_id_key))), true));
+                mNotificationManager.notify(NOTIFICATION_ID, NotificationHandler.createNotification(this, currentSong, true));
                 if (player != null) {
-                    start();
+                    stop();
+                    play(currentSong);
                 } else {
                     initMusicService();
-                    start();
+                    play(currentSong);
                 }
                 break;
             case NOTIFICATION_ACTION_NEXT:
@@ -95,41 +103,54 @@ public class MusicService extends Service implements
         mp.start();
     }
 
-    private void initMusicService() {
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        player.stop();
+        player.release();
     }
 
-    @Override
-    public void start() {
-
+    private void initMusicService() {
+        //open player
+        //get last played
     }
 
     @Override
     public void play(Song song) {
-        MediaPlayer mp = new MediaPlayer();
+        player = new MediaPlayer();
         try {
-            mp.setDataSource(song.getData());
-            mp.prepare();
-            mp.start();
-
+            player.setDataSource(song.getData());
+            player.prepare();
+            player.start();
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     private void playPrev() {
+        stop();
+        currentSong = new DataLoader(this).getPreviousSong(currentSong);
+        play(currentSong);
     }
 
     private void playNext() {
+        stop();
+        currentSong = new DataLoader(this).getNextSong(currentSong);
+        play(currentSong);
     }
 
     @Override
     public void pause() {
-
+        if (player != null) {
+            player.pause();
+        }
     }
 
     @Override
     public void stop() {
-
+        if (player != null) {
+            player.stop();
+        }
     }
 
     @Override
@@ -139,7 +160,7 @@ public class MusicService extends Service implements
 
     @Override
     public boolean isPlaying() {
-        return false;
+        return player.isPlaying();
     }
 
     @Override

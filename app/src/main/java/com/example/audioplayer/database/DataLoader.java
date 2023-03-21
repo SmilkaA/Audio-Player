@@ -2,6 +2,7 @@ package com.example.audioplayer.database;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
@@ -46,7 +47,19 @@ public class DataLoader {
             }
             cursor.close();
         }
+        checkSongsInAudioList();
         return audioList;
+    }
+
+    public void checkSongsInAudioList() {
+        for (Song song : new ArrayList<>(audioList)) {
+            MediaPlayer player = new MediaPlayer();
+            try {
+                player.setDataSource(song.getData());
+            } catch (Exception e) {
+                audioList.remove(song);
+            }
+        }
     }
 
     public List<Album> getAllAlbums() {
@@ -126,5 +139,30 @@ public class DataLoader {
             }
         }
         return true;
+    }
+
+    public Song getNextSong(Song currentSong) {
+        int nextIndex = findIndex(currentSong) + 1;
+        if (nextIndex >= audioList.size()) {
+            return audioList.get(0);
+        } else
+            return audioList.get(nextIndex);
+    }
+
+    public Song getPreviousSong(Song currentSong) {
+        int previousIndex = findIndex(currentSong) - 1;
+        if (previousIndex >= 0) {
+            return audioList.get(previousIndex);
+        } else
+            return audioList.get(audioList.size() - 1);
+    }
+
+    public int findIndex(Song currentSong) {
+        for (Song song : audioList) {
+            if (song.getSongName().equals(currentSong.getSongName())) {
+                return audioList.indexOf(song);
+            }
+        }
+        return 0;
     }
 }
