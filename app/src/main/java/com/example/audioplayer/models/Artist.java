@@ -23,10 +23,10 @@ public class Artist {
     private String name;
 
     @Ignore
-    private List<Album> albumsPerArtist;
+    private List<Song> songsPerArtist;
 
     public Artist() {
-        this.albumsPerArtist = new ArrayList<>();
+        this.songsPerArtist = new ArrayList<>();
     }
 
     public int getId() {
@@ -37,18 +37,6 @@ public class Artist {
         this.id = id;
     }
 
-    public List<Album> getAlbumsPerArtist() {
-        return albumsPerArtist;
-    }
-
-    public void setAlbumsPerArtist(List<Album> albumsPerArtist) {
-        this.albumsPerArtist = albumsPerArtist;
-    }
-
-    public void addAlbumToArtist(Album album) {
-        this.albumsPerArtist.add(album);
-    }
-
     public String getName() {
         return name;
     }
@@ -57,11 +45,15 @@ public class Artist {
         this.name = name;
     }
 
-    public List<Song> getSongPerArtist() {
-        List<Song> songsPerArtist = new ArrayList<>();
-        for (Album album : albumsPerArtist) {
-            songsPerArtist.addAll(album.getSongsInAlbum());
-        }
+    public List<Song> getSongsPerArtist() {
         return songsPerArtist;
+    }
+
+    public void setSongsPerArtist(List<Song> songsPerArtist) {
+        this.songsPerArtist = songsPerArtist;
+    }
+
+    public void addSongsPerArtist(Song song) {
+        this.songsPerArtist.add(song);
     }
 }

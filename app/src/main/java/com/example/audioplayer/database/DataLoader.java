@@ -5,7 +5,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
-import android.util.Log;
 
 import com.example.audioplayer.models.Album;
 import com.example.audioplayer.models.Artist;
@@ -90,20 +89,19 @@ public class DataLoader {
     }
 
     public List<Artist> getAllArtists() {
-        getAllAlbums();
-        for (Album album : albumsList) {
+        for (Song song : audioList) {
             if (new ArrayList<>(artistsList).isEmpty()) {
-                artistsList.add(createNewArtistByAlbum(album));
+                artistsList.add(createNewArtistBySong(song));
             } else {
                 for (Artist artist : new ArrayList<>(artistsList)) {
-                    String artistName = album.getSongsInAlbum().get(0).getArtistName();
+                    String artistName = song.getArtistName();
                     if (artist.getName().equals(artistName)) {
-                        if (!artist.getAlbumsPerArtist().contains(album)) {
-                            artist.addAlbumToArtist(album);
+                        if (!artist.getSongsPerArtist().contains(song)) {
+                            artist.addSongsPerArtist(song);
                         }
                     } else {
                         if (checkArtistBeforeAdd(artistName)) {
-                            artistsList.add(createNewArtistByAlbum(album));
+                            artistsList.add(createNewArtistBySong(song));
                         }
                     }
                 }
@@ -112,10 +110,10 @@ public class DataLoader {
         return artistsList;
     }
 
-    private Artist createNewArtistByAlbum(Album sourceAlbum) {
+    private Artist createNewArtistBySong(Song song) {
         Artist artistToAdd = new Artist();
-        artistToAdd.setName(sourceAlbum.getSongsInAlbum().get(0).getArtistName());
-        artistToAdd.addAlbumToArtist(sourceAlbum);
+        artistToAdd.setName(song.getArtistName());
+        artistToAdd.addSongsPerArtist(song);
         return artistToAdd;
     }
 

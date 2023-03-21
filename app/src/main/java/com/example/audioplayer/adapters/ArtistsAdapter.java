@@ -46,10 +46,8 @@ public class ArtistsAdapter extends RecyclerView.Adapter<ArtistsAdapter.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Artist artistToDisplay = artists.get(position);
         holder.artistName.setText(artistToDisplay.getName());
-        holder.albumsAmount.setText(context.getString(R.string.amount_of_albums,
-                String.valueOf(artistToDisplay.getAlbumsPerArtist().size())));
         holder.songsAmount.setText(context.getString(R.string.amount_of_songs,
-                String.valueOf(artistToDisplay.getSongPerArtist().size())));
+                String.valueOf(artistToDisplay.getSongsPerArtist().size())));
 
         loadThumbnail(holder, artistToDisplay);
 
@@ -64,7 +62,6 @@ public class ArtistsAdapter extends RecyclerView.Adapter<ArtistsAdapter.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView artistName;
-        TextView albumsAmount;
         TextView songsAmount;
         ImageView thumbnail;
 
@@ -72,14 +69,13 @@ public class ArtistsAdapter extends RecyclerView.Adapter<ArtistsAdapter.ViewHold
             super(itemView);
 
             artistName = itemView.findViewById(R.id.item_artist_name);
-            albumsAmount = itemView.findViewById(R.id.item_artist_no_of_albums);
             songsAmount = itemView.findViewById(R.id.item_artist_no_of_songs);
             thumbnail = itemView.findViewById(R.id.item_artist_image);
         }
     }
 
     private void loadThumbnail(@NonNull ViewHolder holder, Artist artistToDisplay) {
-        Song song = artistToDisplay.getSongPerArtist().get(0);
+        Song song = artistToDisplay.getSongsPerArtist().get(0);
         if (song.getThumbnail().equals("11")) {
             Glide.with(context)
                     .load(R.drawable.default_album_icon)
