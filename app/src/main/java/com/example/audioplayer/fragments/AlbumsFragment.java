@@ -1,20 +1,21 @@
 package com.example.audioplayer.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.audioplayer.MainActivity;
+import com.example.audioplayer.R;
 import com.example.audioplayer.adapters.AlbumsAdapter;
 import com.example.audioplayer.adapters.OnClickListener;
 import com.example.audioplayer.database.DataLoader;
@@ -23,19 +24,15 @@ import com.example.audioplayer.models.Album;
 
 import java.util.List;
 
-public class AlbumsFragment extends Fragment {
+public class AlbumsFragment extends Fragment implements OnClickListener {
 
     private FragmentAlbumsBinding binding;
-    private MainActivity mainActivity;
-    private RecyclerView recyclerView;
-    private AlbumsAdapter adapter;
-    private OnClickListener listener;
     private List<Album> albums;
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        mainActivity = (MainActivity) requireActivity();
+        MainActivity mainActivity = (MainActivity) requireActivity();
         DataLoader dataLoader = new DataLoader(getContext());
         albums = dataLoader.getAllAlbums();
     }
@@ -45,25 +42,30 @@ public class AlbumsFragment extends Fragment {
 
         binding = FragmentAlbumsBinding.inflate(inflater, container, false);
 
-
-        listener = new OnClickListener() {
-            @Override
-            public void onClick(int index) {
-                Toast.makeText(getContext(), "clicked item index is " + index, Toast.LENGTH_LONG).show();
-            }
-        };
-        adapter = new AlbumsAdapter(getContext(), albums, listener);
-
-        recyclerView = binding.rvAlbums;
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        recyclerView.setAdapter(adapter);
+        initRecyclerView();
 
         return binding.getRoot();
+    }
+
+    private void initRecyclerView() {
+        AlbumsAdapter adapter = new AlbumsAdapter(getContext(), albums, this);
+        RecyclerView recyclerView = binding.rvAlbums;
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setAdapter(adapter);
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    @Override
+    public void onClick(int index) {
+        Intent intent = new Intent(requireActivity(), MainActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString(getString(R.string.intent_key_album_name), albums.get(index).getAlbumName());
+        intent.putExtras(bundle);
+        startActivity(intent);
     }
 }

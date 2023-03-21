@@ -6,9 +6,11 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -17,6 +19,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.audioplayer.MainActivity;
+import com.example.audioplayer.R;
 import com.example.audioplayer.adapters.OnClickListener;
 import com.example.audioplayer.adapters.SongAdapter;
 import com.example.audioplayer.databinding.FragmentSongsBinding;
@@ -24,14 +27,17 @@ import com.example.audioplayer.models.Song;
 import com.example.audioplayer.service.Constants;
 import com.example.audioplayer.service.MusicService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SongsFragment extends Fragment implements OnClickListener {
 
     private FragmentSongsBinding binding;
+    private MainActivity mainActivity;
     private List<Song> songs;
     private MusicService musicService;
     boolean boundService = false;
+    private String strtext = "";
     private final ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName className, IBinder service) {
@@ -49,7 +55,7 @@ public class SongsFragment extends Fragment implements OnClickListener {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        MainActivity mainActivity = (MainActivity) requireActivity();
+        mainActivity = (MainActivity) requireActivity();
         songs = mainActivity.getAudioData();
     }
 
@@ -64,6 +70,7 @@ public class SongsFragment extends Fragment implements OnClickListener {
     }
 
     private void initRecyclerView() {
+        filterSongsList();
         SongAdapter adapter = new SongAdapter(getContext(), songs, this);
         RecyclerView recyclerView = binding.rvSongs;
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -97,5 +104,20 @@ public class SongsFragment extends Fragment implements OnClickListener {
         playIntent.setAction(Constants.NOTIFICATION_ACTION_PLAY);
         requireActivity().startService(playIntent);
         musicService.play(songs.get(index));
+    }
+
+    private void filterSongsList() {
+        try {
+            Bundle bundle = getArguments();
+            strtext = bundle.getString(getString(R.string.intent_key_album_name_data));
+            if (!strtext.equals("")) {
+                for (Song song : new ArrayList<>(songs)) {
+                    if (!song.getAlbumName().equals(strtext)) {
+                        songs.remove(song);
+                    }
+                }
+            }
+        } catch (Exception ignored) {
+        }
     }
 }

@@ -13,6 +13,7 @@ import androidx.navigation.ui.NavigationUI;
 
 import com.example.audioplayer.database.DataLoader;
 import com.example.audioplayer.databinding.ActivityMainBinding;
+import com.example.audioplayer.fragments.SongsFragment;
 import com.example.audioplayer.models.Song;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -21,6 +22,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
+    private String filter = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
 
         initBottomNavigation();
         checkPermission();
+
+        sendDataToSongFragment();
     }
 
     private void initBottomNavigation() {
@@ -56,5 +60,24 @@ public class MainActivity extends AppCompatActivity {
     public List<Song> getAudioData() {
         DataLoader dataLoader = new DataLoader(getApplicationContext());
         return dataLoader.getAllAudioFromDevice();
+    }
+
+    private void sendDataToSongFragment() {
+        getDataFromAlbumFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(getString(R.string.intent_key_album_name_data), filter);
+        SongsFragment songsFragment = new SongsFragment();
+        songsFragment.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.songs_container, songsFragment)
+                .commit();
+    }
+
+    private void getDataFromAlbumFragment() {
+        try {
+            Bundle b = getIntent().getExtras();
+            filter = b.getString(getString(R.string.intent_key_album_name));
+        } catch (Exception ignored) {
+        }
     }
 }

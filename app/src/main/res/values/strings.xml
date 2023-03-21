@@ -5,4 +5,6 @@
     <string name="title_artists">Artists</string>
     <string name="amount_of_songs"> %1$s Songs</string>
     <string name="amount_of_albums"> %1$s Albums</string>
+    <string name="intent_key_album_name">album_name</string>
+    <string name="intent_key_album_name_data">album_name_data</string>
 </resources>
