@@ -1,10 +1,9 @@
-package com.example.audioplayer;
+package com.example.audioplayer.activities;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -12,9 +11,9 @@ import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.audioplayer.R;
 import com.example.audioplayer.database.DataLoader;
 import com.example.audioplayer.databinding.ActivityMainBinding;
-import com.example.audioplayer.fragments.AlbumsFragment;
 import com.example.audioplayer.fragments.SongsFragment;
 import com.example.audioplayer.models.Album;
 import com.example.audioplayer.models.Artist;
@@ -25,7 +24,6 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ActivityMainBinding binding;
     private DataLoader dataLoader;
     private String filterByAlbum = "";
     private String filterByArtist = "";
@@ -35,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         dataLoader = new DataLoader(getApplicationContext());
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         initBottomNavigation();
@@ -96,5 +94,4 @@ public class MainActivity extends AppCompatActivity {
         } catch (Exception ignored) {
         }
     }
-
 }

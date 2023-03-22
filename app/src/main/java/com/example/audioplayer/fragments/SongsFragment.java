@@ -1,11 +1,8 @@
 package com.example.audioplayer.fragments;
 
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,14 +13,13 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.audioplayer.MainActivity;
 import com.example.audioplayer.R;
+import com.example.audioplayer.activities.MainActivity;
+import com.example.audioplayer.activities.SongPlayerActivity;
 import com.example.audioplayer.adapters.OnClickListener;
 import com.example.audioplayer.adapters.SongAdapter;
 import com.example.audioplayer.databinding.FragmentSongsBinding;
 import com.example.audioplayer.models.Song;
-import com.example.audioplayer.service.Constants;
-import com.example.audioplayer.service.MusicService;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
@@ -35,23 +31,8 @@ public class SongsFragment extends Fragment implements OnClickListener {
     private MainActivity mainActivity;
     private BottomNavigationView bottomNavigationView;
     private List<Song> songs;
-    private MusicService musicService;
-    boolean boundService = false;
     private String filterByAlbum = "";
     private String filterByArtist = "";
-    private final ServiceConnection connection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName className, IBinder service) {
-            MusicService.MusicBinder binder = (MusicService.MusicBinder) service;
-            musicService = binder.getService();
-            boundService = true;
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName arg0) {
-            boundService = false;
-        }
-    };
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -79,7 +60,7 @@ public class SongsFragment extends Fragment implements OnClickListener {
             if ((!filterByArtist.equals("")) || (!filterByAlbum.equals(""))) {
                 bottomNavigationView.setVisibility(View.GONE);
             }
-        } catch (Exception exception) {
+        } catch (Exception ignored) {
         }
     }
 
@@ -89,20 +70,6 @@ public class SongsFragment extends Fragment implements OnClickListener {
         RecyclerView recyclerView = binding.rvSongs;
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        Intent intent = new Intent(requireActivity(), MusicService.class);
-        requireActivity().bindService(intent, connection, Context.BIND_AUTO_CREATE);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        requireActivity().unbindService(connection);
-        boundService = false;
     }
 
     @Override
@@ -119,10 +86,9 @@ public class SongsFragment extends Fragment implements OnClickListener {
 
     @Override
     public void onClick(int index) {
-        Intent playIntent = new Intent(getContext(), MusicService.class);
+        Intent playIntent = new Intent(getContext(), SongPlayerActivity.class);
         playIntent.putExtra(getString(R.string.song_item_id_key), index);
-        playIntent.setAction(Constants.NOTIFICATION_ACTION_PLAY);
-        requireActivity().startService(playIntent);
+        requireActivity().startActivity(playIntent);
     }
 
     private void filterSongsList() {
@@ -160,5 +126,4 @@ public class SongsFragment extends Fragment implements OnClickListener {
             }
         }
     }
-
 }

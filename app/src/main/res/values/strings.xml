@@ -14,4 +14,5 @@
     <string name="action_play">PLAY</string>
     <string name="action_next">NEXT</string>
     <string name="action_pause">PAUSE</string>
+    <string name="song_start_time">00:00</string>
 </resources>

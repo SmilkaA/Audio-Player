@@ -44,7 +44,6 @@ public class MusicService extends Service implements
     public void onCreate() {
         super.onCreate();
         player = new MediaPlayer();
-        initMusicService();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -67,13 +66,10 @@ public class MusicService extends Service implements
                 break;
             case NOTIFICATION_ACTION_PLAY:
                 mNotificationManager.notify(NOTIFICATION_ID, NotificationHandler.createNotification(this, currentSong, true));
-                if (player != null) {
+                if (isPlaying()) {
                     stop();
-                    play(currentSong);
-                } else {
-                    initMusicService();
-                    play(currentSong);
                 }
+                play(currentSong);
                 break;
             case NOTIFICATION_ACTION_NEXT:
                 playNext();
@@ -95,7 +91,7 @@ public class MusicService extends Service implements
 
     @Override
     public void onCompletion(MediaPlayer mp) {
-
+        playNext();
     }
 
     @Override
@@ -110,14 +106,13 @@ public class MusicService extends Service implements
         player.release();
     }
 
-    private void initMusicService() {
-        //open player
-        //get last played
+    @Override
+    public void start() {
+        player.start();
     }
 
     @Override
     public void play(Song song) {
-        player = new MediaPlayer();
         try {
             player.setDataSource(song.getData());
             player.prepare();
@@ -127,13 +122,13 @@ public class MusicService extends Service implements
         }
     }
 
-    private void playPrev() {
+    public void playPrev() {
         stop();
         currentSong = new DataLoader(this).getPreviousSong(currentSong);
         play(currentSong);
     }
 
-    private void playNext() {
+    public void playNext() {
         stop();
         currentSong = new DataLoader(this).getNextSong(currentSong);
         play(currentSong);
@@ -155,7 +150,7 @@ public class MusicService extends Service implements
 
     @Override
     public void seekTo(int position) {
-
+        player.seekTo(position);
     }
 
     @Override
@@ -164,18 +159,13 @@ public class MusicService extends Service implements
     }
 
     @Override
-    public long getDuration() {
-        return 0;
-    }
-
-    @Override
     public int getCurrentStreamPosition() {
-        return 0;
+        return player.getCurrentPosition();
     }
 
-    @Override
-    public void setCallback(Callback callback) {
 
+    public int getSongIndex() {
+        return new DataLoader(this).findIndex(currentSong);
     }
 
     public void toBackground() {

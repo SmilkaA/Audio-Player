@@ -13,7 +13,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.audioplayer.MainActivity;
+import com.example.audioplayer.activities.MainActivity;
 import com.example.audioplayer.R;
 import com.example.audioplayer.adapters.AlbumsAdapter;
 import com.example.audioplayer.adapters.OnClickListener;

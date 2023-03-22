@@ -23,7 +23,7 @@ import android.provider.MediaStore;
 
 import androidx.annotation.RequiresApi;
 
-import com.example.audioplayer.MainActivity;
+import com.example.audioplayer.activities.MainActivity;
 import com.example.audioplayer.R;
 import com.example.audioplayer.models.Song;
 

@@ -159,10 +159,36 @@ public class DataLoader {
 
     public int findIndex(Song currentSong) {
         for (Song song : audioList) {
-            if (song.getSongName().equals(currentSong.getSongName())) {
+            if (song.getId() == currentSong.getId()) {
                 return audioList.indexOf(song);
             }
         }
         return 0;
+    }
+
+    public Song getSongByIndex(int index) {
+        return audioList.get(index);
+    }
+
+    public static String toTimeFormat(long millSecond) {
+        long duration = millSecond / 1000;
+        int hours = (int) duration / 3600;
+        int remainder = (int) duration - hours * 3600;
+        int minute = remainder / 60;
+        remainder = remainder - minute * 60;
+        int second = remainder;
+        String strMinute = Integer.toString(minute);
+        String strSecond = Integer.toString(second);
+        if (strMinute.length() < 2) {
+            strMinute = "0" + minute;
+        }
+        if (strSecond.length() < 2) {
+            strSecond = "0" + second;
+        }
+        if (hours == 0) {
+            return strMinute + ":" + strSecond;
+        } else {
+            return hours + ":" + strMinute + ":" + strSecond;
+        }
     }
 }
