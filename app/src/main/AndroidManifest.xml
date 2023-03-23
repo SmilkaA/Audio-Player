@@ -34,7 +34,8 @@
         </activity>
         <activity
             android:name=".activities.SongPlayerActivity"
-            android:exported="true">
+            android:exported="true"
+            android:launchMode="singleTop">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />

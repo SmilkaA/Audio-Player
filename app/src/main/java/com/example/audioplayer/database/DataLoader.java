@@ -157,7 +157,7 @@ public class DataLoader {
             return audioList.get(audioList.size() - 1);
     }
 
-    public int findIndex(Song currentSong) {
+    public static int findIndex(Song currentSong) {
         for (Song song : audioList) {
             if (song.getId() == currentSong.getId()) {
                 return audioList.indexOf(song);

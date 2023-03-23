@@ -1,10 +1,14 @@
 package com.example.audioplayer.activities;
 
+import static com.example.audioplayer.service.Constants.NOTIFICATION_ID;
+
 import android.annotation.SuppressLint;
+import android.app.NotificationManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.widget.ImageView;
@@ -12,6 +16,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
@@ -21,7 +26,9 @@ import com.example.audioplayer.databinding.PlayerBinding;
 import com.example.audioplayer.models.Song;
 import com.example.audioplayer.service.Constants;
 import com.example.audioplayer.service.MusicService;
+import com.example.audioplayer.service.NotificationHandler;
 
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class SongPlayerActivity extends AppCompatActivity {
 
     private static final int ONE_SECOND = 1000;
@@ -36,7 +43,9 @@ public class SongPlayerActivity extends AppCompatActivity {
     private ImageView playButton;
     private ImageView nextButton;
     private Song songToDisplay;
+    private int songIndex;
 
+    private NotificationManager notificationManager;
     private MusicService musicService;
     boolean boundService = false;
     private final ServiceConnection connection = new ServiceConnection() {
@@ -59,16 +68,12 @@ public class SongPlayerActivity extends AppCompatActivity {
 
         binding = PlayerBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-        Bundle b = getIntent().getExtras();
-        int index = b.getInt(getString(R.string.song_item_id_key));
+        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-
-        startService(index);
-        getSongToDisplay(index);
+        getSongIndex();
         initActivityComponents();
-        setDataToComponents();
-        SongSeekBarThread seekBarThread = new SongSeekBarThread();
-        seekBarThread.start();
+        startService(songIndex);
+        runSeekBar();
     }
 
     @Override
@@ -83,6 +88,12 @@ public class SongPlayerActivity extends AppCompatActivity {
         super.onStop();
         unbindService(connection);
         boundService = false;
+    }
+
+    private void getSongIndex() {
+        Bundle extras = getIntent().getExtras();
+        songIndex = extras.getInt(getString(R.string.song_item_id_key));
+        getSongToDisplay(songIndex);
     }
 
     private void getSongToDisplay(int index) {
@@ -102,6 +113,8 @@ public class SongPlayerActivity extends AppCompatActivity {
         playButton.setOnClickListener(v -> onPlayButtonClicked());
         nextButton = binding.nextMusicButton;
         nextButton.setOnClickListener(v -> onNextButtonClicked());
+
+        setDataToComponents();
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -110,6 +123,7 @@ public class SongPlayerActivity extends AppCompatActivity {
         getSongToDisplay(musicService.getSongIndex());
         setDataToComponents();
         playButton.setImageDrawable(getDrawable(R.drawable.ic_player_pause));
+        notificationManager.notify(NOTIFICATION_ID, NotificationHandler.createNotification(this, songToDisplay, true));
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -117,9 +131,11 @@ public class SongPlayerActivity extends AppCompatActivity {
         if (musicService.isPlaying()) {
             playButton.setImageDrawable(getDrawable(R.drawable.ic_player_play));
             musicService.pause();
+            notificationManager.notify(NOTIFICATION_ID, NotificationHandler.createNotification(this, songToDisplay, false));
         } else {
             playButton.setImageDrawable(getDrawable(R.drawable.ic_player_pause));
             musicService.start();
+            notificationManager.notify(NOTIFICATION_ID, NotificationHandler.createNotification(this, songToDisplay, true));
         }
     }
 
@@ -129,6 +145,7 @@ public class SongPlayerActivity extends AppCompatActivity {
         getSongToDisplay(musicService.getSongIndex());
         setDataToComponents();
         playButton.setImageDrawable(getDrawable(R.drawable.ic_player_pause));
+        notificationManager.notify(NOTIFICATION_ID, NotificationHandler.createNotification(this, songToDisplay, true));
     }
 
     public void setDataToComponents() {
@@ -192,5 +209,10 @@ public class SongPlayerActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    private void runSeekBar() {
+        SongSeekBarThread seekBarThread = new SongSeekBarThread();
+        seekBarThread.start();
     }
 }

@@ -23,8 +23,9 @@ import android.provider.MediaStore;
 
 import androidx.annotation.RequiresApi;
 
-import com.example.audioplayer.activities.MainActivity;
 import com.example.audioplayer.R;
+import com.example.audioplayer.activities.SongPlayerActivity;
+import com.example.audioplayer.database.DataLoader;
 import com.example.audioplayer.models.Song;
 
 public class NotificationHandler {
@@ -34,7 +35,10 @@ public class NotificationHandler {
         Notification.Builder builder = new Notification.Builder(context, CHANNEL_ID);
         NotificationManager mNotificationManager;
 
-        Intent notificationIntent = new Intent(context, MainActivity.class);
+        Intent notificationIntent = new Intent(context, SongPlayerActivity.class);
+        notificationIntent.putExtra(context.getString(R.string.song_item_id_key), DataLoader.findIndex(currentSong));
+        notificationIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 1, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
         Intent previousIntent = new Intent(context, MusicService.class);
@@ -62,9 +66,9 @@ public class NotificationHandler {
                 .addAction(R.drawable.ic_action_prev, context.getResources().getString(R.string.action_previous), pendingPreviousIntent);
 
         if (playStatus) {
-            builder.addAction(android.R.drawable.ic_media_pause,  context.getResources().getString(R.string.action_play), pendingPauseIntent);
+            builder.addAction(android.R.drawable.ic_media_pause, context.getResources().getString(R.string.action_play), pendingPauseIntent);
         } else {
-            builder.addAction(android.R.drawable.ic_media_play,  context.getResources().getString(R.string.action_pause), pendingPlayIntent);
+            builder.addAction(android.R.drawable.ic_media_play, context.getResources().getString(R.string.action_pause), pendingPlayIntent);
         }
 
         builder.addAction(R.drawable.ic_action_next, context.getResources().getString(R.string.action_next), pendingNextIntent)

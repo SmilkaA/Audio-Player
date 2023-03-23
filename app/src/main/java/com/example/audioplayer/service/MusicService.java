@@ -6,7 +6,6 @@ import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Binder;
 import android.os.Build;
@@ -22,7 +21,7 @@ import com.example.audioplayer.models.Song;
 public class MusicService extends Service implements
         MediaPlayer.OnPreparedListener,
         MediaPlayer.OnCompletionListener,
-        AudioManager.OnAudioFocusChangeListener, PlayerInterface {
+        PlayerInterface {
 
     private final IBinder musicBind = new MusicBinder();
     private MediaPlayer player;
@@ -85,11 +84,6 @@ public class MusicService extends Service implements
     }
 
     @Override
-    public void onAudioFocusChange(int focusChange) {
-
-    }
-
-    @Override
     public void onCompletion(MediaPlayer mp) {
         playNext();
     }
@@ -113,6 +107,7 @@ public class MusicService extends Service implements
 
     @Override
     public void play(Song song) {
+        player = new MediaPlayer();
         try {
             player.setDataSource(song.getData());
             player.prepare();
@@ -165,10 +160,6 @@ public class MusicService extends Service implements
 
 
     public int getSongIndex() {
-        return new DataLoader(this).findIndex(currentSong);
-    }
-
-    public void toBackground() {
-        stopForeground(true);
+        return DataLoader.findIndex(currentSong);
     }
 }
