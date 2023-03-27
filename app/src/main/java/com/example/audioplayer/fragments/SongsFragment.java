@@ -92,6 +92,7 @@ public class SongsFragment extends Fragment implements OnClickListener {
         Intent playIntent = new Intent(getContext(), SongPlayerActivity.class);
         playIntent.putExtra(getString(R.string.song_item_id_key), index);
         requireActivity().startActivity(playIntent);
+        mainActivity.initMiniPlayer(index);
     }
 
     private void filterSongsList() {

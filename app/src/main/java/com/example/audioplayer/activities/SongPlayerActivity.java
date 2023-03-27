@@ -97,7 +97,7 @@ public class SongPlayerActivity extends AppCompatActivity {
     }
 
     private void getSongToDisplay(int index) {
-        songToDisplay = new DataLoader(this).getSongByIndex(index);
+        songToDisplay = DataLoader.getSongByIndex(index);
     }
 
     private void initActivityComponents() {

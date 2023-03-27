@@ -29,4 +29,19 @@
         app:layout_constraintTop_toTopOf="parent"
         app:navGraph="@navigation/mobile_navigation" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.example.audioplayer.fragments.PlayerMiniView
+            android:id="@+id/mini_player"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:paddingBottom="50dp"
+            android:visibility="gone"
+            app:nextMusicButtonMini="@drawable/ic_action_next"
+            app:playMusicButtonMini="@drawable/ic_action_play" />
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

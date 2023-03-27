@@ -166,7 +166,7 @@ public class DataLoader {
         return 0;
     }
 
-    public Song getSongByIndex(int index) {
+    public static Song getSongByIndex(int index) {
         return audioList.get(index);
     }
 

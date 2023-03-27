@@ -1,0 +1,9 @@
+<resources>
+    <declare-styleable name="PlayerMiniView">
+        <attr name="musicIconMini" format="reference" />
+        <attr name="musicNameMini" format="string" />
+        <attr name="musicArtistMini" format="string" />
+        <attr name="playMusicButtonMini" format="reference" />
+        <attr name="nextMusicButtonMini" format="reference" />
+    </declare-styleable>
+</resources>
