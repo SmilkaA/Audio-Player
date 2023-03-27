@@ -27,6 +27,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import java.util.ArrayList;
 import java.util.List;
 
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class SongsFragment extends Fragment implements OnClickListener {
 
     private FragmentSongsBinding binding;
@@ -48,11 +49,18 @@ public class SongsFragment extends Fragment implements OnClickListener {
 
         binding = FragmentSongsBinding.inflate(inflater, container, false);
         bottomNavigationView = mainActivity.findViewById(R.id.nav_view);
-        SongsViewModel songsViewModel = new ViewModelProvider(this).get(SongsViewModel.class);
+        addSongToDB();
 
         initRecyclerView();
 
         return binding.getRoot();
+    }
+
+    private void addSongToDB() {
+        SongsViewModel songsViewModel = new ViewModelProvider(this).get(SongsViewModel.class);
+        for (Song song : songs) {
+            songsViewModel.insert(song);
+        }
     }
 
     @Override
