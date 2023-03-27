@@ -13,8 +13,12 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
@@ -89,6 +93,23 @@ public class MainActivity extends AppCompatActivity {
         super.onStop();
         unbindService(connection);
         boundService = false;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.action_bluetooth) {
+            Intent playIntent = new Intent(this, BluetoothActivity.class);
+            startActivity(playIntent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void initBottomNavigation() {

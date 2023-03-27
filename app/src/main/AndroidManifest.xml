@@ -41,6 +41,15 @@
                 android:value="" />
         </activity>
 
+        <activity
+            android:name=".activities.BluetoothActivity"
+            android:exported="true"
+            android:launchMode="singleTop">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+
         <service android:name="com.example.audioplayer.service.MusicService" />
     </application>
 
