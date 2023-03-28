@@ -82,6 +82,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        try {
+            setDataToComponents(musicService.getCurrentSong());
+        } catch (Exception ignored) {
+        }
+    }
+
+    @Override
     public void onStart() {
         super.onStart();
         Intent intent = new Intent(this, MusicService.class);
@@ -185,7 +194,7 @@ public class MainActivity extends AppCompatActivity {
         playerMiniView.setThumbnail(songToDisplay);
         playerMiniView.setSongName(songToDisplay.getSongName());
         playerMiniView.setArtistName(songToDisplay.getArtistName());
-        playerMiniView.setPlayButton(true);
+        playerMiniView.setPlayButton(musicService.isPlaying());
         playerMiniView.setOnClickListener(v -> onMiniPlayerClicked(DataLoader.findIndex(songToDisplay)));
     }
 
@@ -195,7 +204,6 @@ public class MainActivity extends AppCompatActivity {
         startActivity(playIntent);
     }
 
-    //refactor?
     @SuppressLint("UseCompatLoadingForDrawables")
     private void onPlayButtonClicked(Song songInMini) {
         if (musicService.isPlaying()) {

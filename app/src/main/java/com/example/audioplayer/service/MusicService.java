@@ -162,4 +162,8 @@ public class MusicService extends Service implements
     public int getSongIndex() {
         return DataLoader.findIndex(currentSong);
     }
+
+    public Song getCurrentSong() {
+        return currentSong;
+    }
 }
