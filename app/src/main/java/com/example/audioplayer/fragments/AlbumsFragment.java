@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -43,6 +44,7 @@ public class AlbumsFragment extends Fragment implements OnClickListener {
         binding = FragmentAlbumsBinding.inflate(inflater, container, false);
 
         initRecyclerView();
+        addAlbumsToDB();
 
         return binding.getRoot();
     }
@@ -52,6 +54,13 @@ public class AlbumsFragment extends Fragment implements OnClickListener {
         RecyclerView recyclerView = binding.rvAlbums;
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(adapter);
+    }
+
+    private void addAlbumsToDB() {
+        AudioViewModel songsViewModel = new ViewModelProvider(this).get(AudioViewModel.class);
+        for (Album album : albums) {
+            songsViewModel.insertAlbum(album);
+        }
     }
 
     @Override

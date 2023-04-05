@@ -57,9 +57,9 @@ public class SongsFragment extends Fragment implements OnClickListener {
     }
 
     private void addSongToDB() {
-        SongsViewModel songsViewModel = new ViewModelProvider(this).get(SongsViewModel.class);
+        AudioViewModel songsViewModel = new ViewModelProvider(this).get(AudioViewModel.class);
         for (Song song : songs) {
-            songsViewModel.insert(song);
+            songsViewModel.insertSong(song);
         }
     }
 

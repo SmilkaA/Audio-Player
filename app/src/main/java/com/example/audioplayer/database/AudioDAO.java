@@ -10,6 +10,7 @@ import androidx.room.Transaction;
 import com.example.audioplayer.models.Album;
 import com.example.audioplayer.models.AlbumWithSongs;
 import com.example.audioplayer.models.Artist;
+import com.example.audioplayer.models.ArtistWithSongs;
 import com.example.audioplayer.models.Song;
 
 import java.util.List;
@@ -37,4 +38,8 @@ public interface AudioDAO {
     @Transaction
     @Query("SELECT * FROM albums_table ORDER BY album_id ASC")
     LiveData<List<AlbumWithSongs>> getAlbumWithSongs();
+
+    @Transaction
+    @Query("SELECT * FROM artists_table ORDER BY artist_id ASC")
+    LiveData<List<ArtistWithSongs>> getArtistWithSongs();
 }

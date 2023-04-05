@@ -7,6 +7,7 @@ import androidx.lifecycle.LiveData;
 import com.example.audioplayer.models.Album;
 import com.example.audioplayer.models.AlbumWithSongs;
 import com.example.audioplayer.models.Artist;
+import com.example.audioplayer.models.ArtistWithSongs;
 import com.example.audioplayer.models.Song;
 
 import java.util.List;
@@ -18,6 +19,7 @@ public class AudioRepository {
     private LiveData<List<Album>> allAlbums;
     private LiveData<List<Artist>> allArtists;
     private LiveData<List<AlbumWithSongs>> albumWithSongs;
+    private LiveData<List<ArtistWithSongs>> artistWithSongs;
 
     public AudioRepository(Application application) {
         AudioDatabase db = AudioDatabase.getDatabase(application);
@@ -26,6 +28,7 @@ public class AudioRepository {
         allAlbums = audioDAO.getAllAlbums();
         allArtists = audioDAO.getAllArtists();
         albumWithSongs = audioDAO.getAlbumWithSongs();
+        artistWithSongs = audioDAO.getArtistWithSongs();
     }
 
     public LiveData<List<Song>> getAllSongs() {
@@ -54,5 +57,9 @@ public class AudioRepository {
 
     public LiveData<List<AlbumWithSongs>> getAlbumWithSongs() {
         return albumWithSongs;
+    }
+
+    public LiveData<List<ArtistWithSongs>> getArtistWithSongs() {
+        return artistWithSongs;
     }
 }

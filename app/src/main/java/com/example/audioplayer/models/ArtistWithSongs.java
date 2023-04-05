@@ -5,12 +5,12 @@ import androidx.room.Relation;
 
 import java.util.List;
 
-public class ArtistWithAlbums {
+public class ArtistWithSongs {
     @Embedded
     public Artist artist;
     @Relation(
             parentColumn = "artist_id",
             entityColumn = "artistId"
     )
-    public List<Album> albums;
+    public List<Song> songs;
 }

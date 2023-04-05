@@ -19,7 +19,6 @@ public class DataLoader {
     public static final Uri THUMBNAIL_URI = Uri.parse("content://media/external/audio/albumart");
     private final Context context;
     private Uri uri;
-    private final String selection = MediaStore.Audio.Media.IS_MUSIC + "!=0";
     private static final List<Song> audioList = new ArrayList<>();
     private static final List<Album> albumsList = new ArrayList<>();
     private static final List<Artist> artistsList = new ArrayList<>();
@@ -38,6 +37,7 @@ public class DataLoader {
     }
 
     public List<Song> getAllAudioFromDevice() {
+        String selection = MediaStore.Audio.Media.IS_MUSIC + "!=0";
         Cursor cursor = context.getContentResolver().query(uri, null, selection, null, null);
         audioList.clear();
         if (cursor != null) {
@@ -127,6 +127,7 @@ public class DataLoader {
 
     private Artist createNewArtistBySong(Song song) {
         Artist artistToAdd = new Artist();
+        artistToAdd.setId(song.getArtistId());
         artistToAdd.setName(song.getArtistName());
         artistToAdd.addSongsPerArtist(song);
         return artistToAdd;
