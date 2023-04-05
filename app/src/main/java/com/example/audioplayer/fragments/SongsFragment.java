@@ -67,7 +67,7 @@ public class SongsFragment extends Fragment implements OnClickListener {
     public void onResume() {
         super.onResume();
         try {
-            if ((!filterByArtist.equals("")) || (!filterByAlbum.equals(""))) {
+            if ((filterByArtist == null) || (filterByAlbum == null)) {
                 bottomNavigationView.setVisibility(View.GONE);
             }
         } catch (Exception ignored) {
@@ -98,19 +98,21 @@ public class SongsFragment extends Fragment implements OnClickListener {
     @Override
     public void onClick(int index) {
         Intent playIntent = new Intent(getContext(), SongPlayerActivity.class);
-        playIntent.putExtra(getString(R.string.song_item_id_key), index);
+        playIntent.putExtra(getString(R.string.song_item_id_key), songs.get(index).getId());
         requireActivity().startActivity(playIntent);
-        mainActivity.initMiniPlayer(index);
+        mainActivity.initMiniPlayer(songs.get(index).getId());
     }
 
     private void filterSongsList() {
         try {
             Bundle bundle = getArguments();
-            filterByAlbum = bundle.getString(getString(R.string.intent_key_album_name_data));
-            filterByArtist = bundle.getString(getString(R.string.intent_key_artist_name_data));
-            filterByAlbum(filterByAlbum);
-            filterByArtist(filterByArtist);
-            bundle.clear();
+            if (bundle != null) {
+                filterByAlbum = bundle.getString(getString(R.string.intent_key_album_name_data));
+                filterByArtist = bundle.getString(getString(R.string.intent_key_artist_name_data));
+                filterByAlbum(filterByAlbum);
+                filterByArtist(filterByArtist);
+                bundle.clear();
+            }
         } catch (Exception ignored) {
         }
     }

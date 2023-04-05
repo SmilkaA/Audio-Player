@@ -10,13 +10,12 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.audioplayer.models.Album;
 import com.example.audioplayer.models.Artist;
-import com.example.audioplayer.models.RecentHistory;
 import com.example.audioplayer.models.Song;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-@Database(entities = {Album.class, Artist.class, Song.class, RecentHistory.class}, version = 1)
+@Database(entities = {Album.class, Artist.class, Song.class}, version = 1)
 public abstract class AudioDatabase extends RoomDatabase {
 
     public abstract AudioDAO audioDAO();

@@ -2,7 +2,7 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "a126e3ae3bea1b60bb2d5395c9de3245",
+    "identityHash": "6f2476c1136b2179bf523f3fffc29975",
     "entities": [
       {
         "tableName": "albums_table",
@@ -165,38 +165,12 @@
         },
         "indices": [],
         "foreignKeys": []
-      },
-      {
-        "tableName": "recent_history_table",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`history_id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `time_played_id` INTEGER NOT NULL)",
-        "fields": [
-          {
-            "fieldPath": "id",
-            "columnName": "history_id",
-            "affinity": "INTEGER",
-            "notNull": true
-          },
-          {
-            "fieldPath": "timePlayed",
-            "columnName": "time_played_id",
-            "affinity": "INTEGER",
-            "notNull": true
-          }
-        ],
-        "primaryKey": {
-          "autoGenerate": true,
-          "columnNames": [
-            "history_id"
-          ]
-        },
-        "indices": [],
-        "foreignKeys": []
       }
     ],
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a126e3ae3bea1b60bb2d5395c9de3245')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '6f2476c1136b2179bf523f3fffc29975')"
     ]
   }
 }

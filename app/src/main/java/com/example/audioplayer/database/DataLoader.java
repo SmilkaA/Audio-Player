@@ -166,8 +166,13 @@ public class DataLoader {
         return 0;
     }
 
-    public static Song getSongByIndex(int index) {
-        return audioList.get(index);
+    public static Song getSongById(int id) {
+        for (Song song : audioList) {
+            if (song.getId() == id) {
+                return song;
+            }
+        }
+        return audioList.get(0);
     }
 
     public static String toTimeFormat(long millSecond) {

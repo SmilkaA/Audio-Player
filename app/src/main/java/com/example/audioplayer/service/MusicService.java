@@ -49,7 +49,7 @@ public class MusicService extends Service implements
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         try {
-            currentSong = new DataLoader(getApplicationContext()).getAllAudioFromDevice().get(intent.getExtras().getInt(getString(R.string.song_item_id_key)));
+            currentSong = DataLoader.getSongById(intent.getExtras().getInt(getString(R.string.song_item_id_key)));
         } catch (Exception ignored) {
         }
 
@@ -160,7 +160,7 @@ public class MusicService extends Service implements
 
 
     public int getSongIndex() {
-        return DataLoader.findIndex(currentSong);
+        return currentSong.getId();
     }
 
     public Song getCurrentSong() {

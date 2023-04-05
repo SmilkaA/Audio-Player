@@ -182,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void initMiniPlayer(int index) {
-        Song songInMini = DataLoader.getSongByIndex(index);
+        Song songInMini = DataLoader.getSongById(index);
         setDataToComponents(songInMini);
         playerMiniView.getPlayButton().setOnClickListener(v -> onPlayButtonClicked(songInMini));
         playerMiniView.getNextButton().setOnClickListener(v -> onNextButtonClicked());
@@ -195,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
         playerMiniView.setSongName(songToDisplay.getSongName());
         playerMiniView.setArtistName(songToDisplay.getArtistName());
         playerMiniView.setPlayButton(musicService.isPlaying());
-        playerMiniView.setOnClickListener(v -> onMiniPlayerClicked(DataLoader.findIndex(songToDisplay)));
+        playerMiniView.setOnClickListener(v -> onMiniPlayerClicked(songToDisplay.getId()));
     }
 
     private void onMiniPlayerClicked(int index) {
@@ -220,7 +220,7 @@ public class MainActivity extends AppCompatActivity {
     @SuppressLint("UseCompatLoadingForDrawables")
     private void onNextButtonClicked() {
         musicService.playNext();
-        Song songToDisplay = DataLoader.getSongByIndex(musicService.getSongIndex());
+        Song songToDisplay = DataLoader.getSongById(musicService.getSongIndex());
         setDataToComponents(songToDisplay);
         playerMiniView.getPlayButton().setImageDrawable(getDrawable(R.drawable.ic_player_pause));
         notificationManager.notify(NOTIFICATION_ID, NotificationHandler.createNotification(getApplicationContext(), songToDisplay, true));
