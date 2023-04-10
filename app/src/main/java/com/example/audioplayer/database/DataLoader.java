@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Environment;
 import android.provider.MediaStore;
 
 import com.example.audioplayer.models.Album;
@@ -16,7 +17,8 @@ import java.util.List;
 
 public class DataLoader {
 
-    public static final Uri THUMBNAIL_URI = Uri.parse("content://media/external/audio/albumart");
+    public static final String THUMBNAIL_URI = Environment.getExternalStorageDirectory().getAbsolutePath() + "/Music/.thumbnails/";
+    public static final String THUMBNAIL_TYPE = ".jpg";
     private final Context context;
     private Uri uri;
     private static final List<Song> audioList = new ArrayList<>();
@@ -69,7 +71,7 @@ public class DataLoader {
                 albumsList.add(createNewAlbumForSong(audioFromDevice));
             } else {
                 for (Album album : new ArrayList<>(albumsList)) {
-                    if (album.getAlbumName().equals(audioFromDevice.getAlbumName())) {
+                    if (album.getAlbumName().compareTo(audioFromDevice.getAlbumName())==0) {
                         if (!album.getSongsInAlbum().contains(audioFromDevice)) {
                             album.addSongToAlbum(audioFromDevice);
                         }
@@ -110,7 +112,7 @@ public class DataLoader {
             } else {
                 for (Artist artist : new ArrayList<>(artistsList)) {
                     String artistName = song.getArtistName();
-                    if (artist.getName().equals(artistName)) {
+                    if (artist.getName().compareTo(artistName)==0) {
                         if (!artist.getSongsPerArtist().contains(song)) {
                             artist.addSongsPerArtist(song);
                         }
@@ -167,34 +169,12 @@ public class DataLoader {
         return 0;
     }
 
-    public static Song getSongById(int id) {
+    public static Song getSongByPosition(int position) {
         for (Song song : audioList) {
-            if (song.getId() == id) {
+            if (song.getId() == position) {
                 return song;
             }
         }
         return audioList.get(0);
-    }
-
-    public static String toTimeFormat(long millSecond) {
-        long duration = millSecond / 1000;
-        int hours = (int) duration / 3600;
-        int remainder = (int) duration - hours * 3600;
-        int minute = remainder / 60;
-        remainder = remainder - minute * 60;
-        int second = remainder;
-        String strMinute = Integer.toString(minute);
-        String strSecond = Integer.toString(second);
-        if (strMinute.length() < 2) {
-            strMinute = "0" + minute;
-        }
-        if (strSecond.length() < 2) {
-            strSecond = "0" + second;
-        }
-        if (hours == 0) {
-            return strMinute + ":" + strSecond;
-        } else {
-            return hours + ":" + strMinute + ":" + strSecond;
-        }
     }
 }

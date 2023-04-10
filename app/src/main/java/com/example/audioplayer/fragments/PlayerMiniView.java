@@ -57,13 +57,13 @@ public class PlayerMiniView extends LinearLayout {
     }
 
     public void setThumbnail(Song songToDisplay) {
-        if (songToDisplay.getThumbnail().equals("11")) {
+        if (songToDisplay.getThumbnailUri() != null) {
             Glide.with(this)
-                    .load(R.drawable.default_album_icon)
+                    .load(songToDisplay.getThumbnailUri())
                     .into(thumbnail);
         } else {
             Glide.with(this)
-                    .load(songToDisplay.getThumbnailUri())
+                    .load(R.drawable.default_album_icon)
                     .into(thumbnail);
         }
     }

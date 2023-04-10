@@ -67,10 +67,13 @@ public class SongsFragment extends Fragment implements OnClickListener {
     public void onResume() {
         super.onResume();
         try {
-            if ((filterByArtist == null) || (filterByAlbum == null)) {
+            if ((filterByArtist == null) && (filterByAlbum != null)) {
+                bottomNavigationView.setVisibility(View.GONE);
+            }else if ((filterByArtist != null) && (filterByAlbum == null)) {
                 bottomNavigationView.setVisibility(View.GONE);
             }
-        } catch (Exception ignored) {
+        } catch (Exception exception) {
+            exception.printStackTrace();
         }
     }
 
@@ -113,7 +116,8 @@ public class SongsFragment extends Fragment implements OnClickListener {
                 filterByArtist(filterByArtist);
                 bundle.clear();
             }
-        } catch (Exception ignored) {
+        } catch (Exception exception) {
+            exception.printStackTrace();
         }
     }
 

@@ -1,6 +1,9 @@
 package com.example.audioplayer.adapters;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,18 +46,18 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Song songToDisplay = songs.get(position);
+        Song songToDisplay = this.songs.get(position);
         holder.songName.setText(songToDisplay.getSongName());
         holder.artistName.setText(songToDisplay.getArtistName());
 
         loadThumbnail(holder, songToDisplay);
 
-        holder.itemView.setOnClickListener(v -> listener.onClick(position));
+        holder.itemView.setOnClickListener(v -> this.listener.onClick(position));
     }
 
     @Override
     public int getItemCount() {
-        return songs.size();
+        return this.songs.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -71,13 +74,13 @@ public class SongAdapter extends RecyclerView.Adapter<SongAdapter.ViewHolder> {
     }
 
     private void loadThumbnail(@NonNull ViewHolder holder, Song songToDisplay) {
-        if (songToDisplay.getThumbnail().equals("11")) {
-            Glide.with(context)
-                    .load(R.drawable.default_album_icon)
+        if (songToDisplay.getThumbnailUri() != null) {
+            Glide.with(this.context)
+                    .load(songToDisplay.getThumbnailUri())
                     .into(holder.thumbnail);
         } else {
-            Glide.with(context)
-                    .load(songToDisplay.getThumbnailUri())
+            Glide.with(this.context)
+                    .load(R.drawable.default_album_icon)
                     .into(holder.thumbnail);
         }
     }

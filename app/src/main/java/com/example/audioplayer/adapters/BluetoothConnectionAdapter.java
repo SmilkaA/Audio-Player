@@ -45,7 +45,7 @@ public class BluetoothConnectionAdapter extends RecyclerView.Adapter<BluetoothCo
     @SuppressLint("MissingPermission")
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        BluetoothDevice device = devices.get(position);
+        BluetoothDevice device = this.devices.get(position);
         holder.deviceName.setText(device.getName());
         holder.deviceMAC.setText(device.getAddress());
         if (device.getBondState() == BluetoothDevice.BOND_BONDED) {
@@ -59,25 +59,26 @@ public class BluetoothConnectionAdapter extends RecyclerView.Adapter<BluetoothCo
                 holder.pairButton.setText(R.string.bluetooth_pairing_text);
                 pairDevice(device);
             }
-            if (!saveState) {
-                devices.remove(device);
+            if (!this.saveState) {
+                this.devices.remove(device);
                 notifyItemRemoved(position);
                 notifyItemChanged(position);
-                notifyItemRangeChanged(position, devices.size());
+                notifyItemRangeChanged(position, this.devices.size());
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return devices.size();
+        return this.devices.size();
     }
 
     private void pairDevice(BluetoothDevice device) {
         try {
             Method m = device.getClass().getMethod("createBond", (Class[]) null);
             m.invoke(device, (Object[]) null);
-        } catch (Exception ignored) {
+        } catch (Exception exception) {
+            exception.printStackTrace();
         }
     }
 
@@ -85,7 +86,8 @@ public class BluetoothConnectionAdapter extends RecyclerView.Adapter<BluetoothCo
         try {
             Method m = device.getClass().getMethod("removeBond", (Class[]) null);
             m.invoke(device, (Object[]) null);
-        } catch (Exception ignored) {
+        } catch (Exception exception) {
+            exception.printStackTrace();
         }
     }
 

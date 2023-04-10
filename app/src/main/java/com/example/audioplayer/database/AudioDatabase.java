@@ -31,23 +31,10 @@ public abstract class AudioDatabase extends RoomDatabase {
                 if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                                     AudioDatabase.class, "audio_database")
-                            .addCallback(sRoomDatabaseCallback)
                             .build();
                 }
             }
         }
         return INSTANCE;
     }
-    private static RoomDatabase.Callback sRoomDatabaseCallback = new RoomDatabase.Callback() {
-        @Override
-        public void onCreate(@NonNull SupportSQLiteDatabase db) {
-            super.onCreate(db);
-
-            databaseWriteExecutor.execute(() -> {
-                AudioDAO dao = INSTANCE.audioDAO();
-                Song song = new Song(1,"","","","","","",1,1,1,1,1,1);
-                dao.insertSong(song);
-            });
-        }
-    };
 }

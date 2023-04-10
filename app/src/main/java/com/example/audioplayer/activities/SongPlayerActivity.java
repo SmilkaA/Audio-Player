@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.example.audioplayer.R;
+import com.example.audioplayer.Utils;
 import com.example.audioplayer.database.DataLoader;
 import com.example.audioplayer.databinding.PlayerBinding;
 import com.example.audioplayer.models.Song;
@@ -45,6 +46,7 @@ public class SongPlayerActivity extends AppCompatActivity {
     private Song songToDisplay;
     private int songIndex;
 
+    private SongSeekBarThread seekBarThread;
     private NotificationManager notificationManager;
     private MusicService musicService;
     boolean boundService = false;
@@ -69,6 +71,7 @@ public class SongPlayerActivity extends AppCompatActivity {
         binding = PlayerBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        seekBarThread = new SongSeekBarThread();
 
         getSongIndex();
         initActivityComponents();
@@ -88,6 +91,7 @@ public class SongPlayerActivity extends AppCompatActivity {
         super.onStop();
         unbindService(connection);
         boundService = false;
+        seekBarThread.interrupt();
     }
 
     private void getSongIndex() {
@@ -97,7 +101,7 @@ public class SongPlayerActivity extends AppCompatActivity {
     }
 
     private void getSongToDisplay(int index) {
-        songToDisplay = DataLoader.getSongById(index);
+        songToDisplay = DataLoader.getSongByPosition(index);
     }
 
     private void initActivityComponents() {
@@ -149,13 +153,13 @@ public class SongPlayerActivity extends AppCompatActivity {
     }
 
     public void setDataToComponents() {
-        if (songToDisplay.getThumbnail().equals("11")) {
+        if (songToDisplay.getThumbnailUri() != null) {
             Glide.with(this)
-                    .load(R.drawable.default_album_icon)
+                    .load(songToDisplay.getThumbnailUri())
                     .into(songThumbnail);
         } else {
             Glide.with(this)
-                    .load(songToDisplay.getThumbnailUri())
+                    .load(R.drawable.default_album_icon)
                     .into(songThumbnail);
         }
         songName.setText(songToDisplay.getSongName());
@@ -177,10 +181,10 @@ public class SongPlayerActivity extends AppCompatActivity {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
                 musicService.seekTo(seekBar.getProgress());
-                songCurrentTime.setText(DataLoader.toTimeFormat(seekBar.getProgress()));
+                songCurrentTime.setText(Utils.toTimeFormat(seekBar.getProgress()));
             }
         });
-        songEndTime.setText(DataLoader.toTimeFormat(songToDisplay.getDuration()));
+        songEndTime.setText(Utils.toTimeFormat(songToDisplay.getDuration()));
 
     }
 
@@ -198,7 +202,7 @@ public class SongPlayerActivity extends AppCompatActivity {
                 try {
                     Thread.sleep(ONE_SECOND);
                     if (musicService.isPlaying()) {
-                        final String time = DataLoader.toTimeFormat(musicService.getCurrentStreamPosition());
+                        final String time = Utils.toTimeFormat(musicService.getCurrentStreamPosition());
                         runOnUiThread(() -> {
                             songProgress.setProgress(musicService.getCurrentStreamPosition());
                             songCurrentTime.setText(time);
@@ -212,7 +216,7 @@ public class SongPlayerActivity extends AppCompatActivity {
     }
 
     private void runSeekBar() {
-        SongSeekBarThread seekBarThread = new SongSeekBarThread();
         seekBarThread.start();
+        seekBarThread.interrupt();
     }
 }

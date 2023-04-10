@@ -86,7 +86,8 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
         try {
             setDataToComponents(musicService.getCurrentSong());
-        } catch (Exception ignored) {
+        } catch (Exception exception) {
+            exception.printStackTrace();
         }
     }
 
@@ -170,7 +171,8 @@ public class MainActivity extends AppCompatActivity {
             Bundle b = getIntent().getExtras();
             filterByAlbum = b.getString(getString(R.string.intent_key_album_name));
             filterByArtist = b.getString(getString(R.string.intent_key_artist_name));
-        } catch (Exception ignored) {
+        } catch (Exception exception) {
+            exception.printStackTrace();
         }
     }
 
@@ -181,12 +183,12 @@ public class MainActivity extends AppCompatActivity {
         startService(playIntent);
     }
 
-    public void initMiniPlayer(int index) {
-        Song songInMini = DataLoader.getSongById(index);
+    public void initMiniPlayer(int position) {
+        Song songInMini = DataLoader.getSongByPosition(position);
         setDataToComponents(songInMini);
         playerMiniView.getPlayButton().setOnClickListener(v -> onPlayButtonClicked(songInMini));
         playerMiniView.getNextButton().setOnClickListener(v -> onNextButtonClicked());
-        startService(index);
+        startService(position);
     }
 
     private void setDataToComponents(Song songToDisplay) {
@@ -220,7 +222,7 @@ public class MainActivity extends AppCompatActivity {
     @SuppressLint("UseCompatLoadingForDrawables")
     private void onNextButtonClicked() {
         musicService.playNext();
-        Song songToDisplay = DataLoader.getSongById(musicService.getSongIndex());
+        Song songToDisplay = DataLoader.getSongByPosition(musicService.getSongIndex());
         setDataToComponents(songToDisplay);
         playerMiniView.getPlayButton().setImageDrawable(getDrawable(R.drawable.ic_player_pause));
         notificationManager.notify(NOTIFICATION_ID, NotificationHandler.createNotification(getApplicationContext(), songToDisplay, true));

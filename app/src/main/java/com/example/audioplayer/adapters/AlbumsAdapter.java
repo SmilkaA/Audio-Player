@@ -44,18 +44,18 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Album albumToDisplay = albums.get(position);
+        Album albumToDisplay = this.albums.get(position);
         holder.albumName.setText(albumToDisplay.getAlbumName());
         holder.songsAmount.setText(context.getString(R.string.amount_of_songs,
                 String.valueOf(albumToDisplay.getSongsInAlbum().size())));
         loadThumbnail(holder, albumToDisplay);
 
-        holder.itemView.setOnClickListener(v -> listener.onClick(position));
+        holder.itemView.setOnClickListener(v -> this.listener.onClick(position));
     }
 
     @Override
     public int getItemCount() {
-        return albums.size();
+        return this.albums.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -75,13 +75,13 @@ public class AlbumsAdapter extends RecyclerView.Adapter<AlbumsAdapter.ViewHolder
 
     private void loadThumbnail(@NonNull ViewHolder holder, Album albumToDisplay) {
         Song song = albumToDisplay.getSongsInAlbum().get(0);
-        if (song.getThumbnail().equals("11")) {
-            Glide.with(context)
-                    .load(R.drawable.default_album_icon)
+        if (song.getThumbnailUri() != null) {
+            Glide.with(this.context)
+                    .load(song.getThumbnailUri())
                     .into(holder.thumbnail);
         } else {
-            Glide.with(context)
-                    .load(song.getThumbnailUri())
+            Glide.with(this.context)
+                    .load(R.drawable.default_album_icon)
                     .into(holder.thumbnail);
         }
     }

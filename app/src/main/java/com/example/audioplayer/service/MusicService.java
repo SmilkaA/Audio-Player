@@ -49,8 +49,9 @@ public class MusicService extends Service implements
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         try {
-            currentSong = DataLoader.getSongById(intent.getExtras().getInt(getString(R.string.song_item_id_key)));
-        } catch (Exception ignored) {
+            currentSong = DataLoader.getSongByPosition(intent.getExtras().getInt(getString(R.string.song_item_id_key)));
+        } catch (Exception exception) {
+            exception.printStackTrace();
         }
 
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);

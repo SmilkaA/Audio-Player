@@ -45,7 +45,7 @@ public class BluetoothActivity extends AppCompatActivity {
     private List<BluetoothDevice> devicesAvailable = new ArrayList<>();
 
     private BluetoothAdapter bluetoothAdapter;
-    private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             devicesAvailable.clear();
             if (BluetoothDevice.ACTION_FOUND.equals(intent.getAction())) {
@@ -71,9 +71,15 @@ public class BluetoothActivity extends AppCompatActivity {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        unregisterReceiver(mReceiver);
+    protected void onResume() {
+        super.onResume();
+        registerReceiver(broadcastReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        unregisterReceiver(broadcastReceiver);
     }
 
     private void handlePermissions() {
@@ -93,9 +99,7 @@ public class BluetoothActivity extends AppCompatActivity {
         noAvailableView = binding.bluetoothNoAvailableText;
 
         reloadAvailable = binding.reload;
-        reloadAvailable.setOnClickListener(v -> {
-            onReloadClicked();
-        });
+        reloadAvailable.setOnClickListener(v -> onReloadClicked());
     }
 
     private void onReloadClicked() {
@@ -129,7 +133,6 @@ public class BluetoothActivity extends AppCompatActivity {
     }
 
     public void getBluetoothDevices() {
-        registerReceiver(mReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
         bluetoothAdapter.startDiscovery();
         initRecyclerViewForAvailableDevices();
     }
